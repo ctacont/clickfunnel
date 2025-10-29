@@ -2,6 +2,12 @@
 
 Eine moderne Angular-Anwendung zur Messung und Analyse von Click-Funnels für digitale Produkte.
 
+## 🌐 Live Demo
+
+**👉 [Demo ansehen](https://ctacont.github.io/clickfunnel/)**
+
+Die App ist live auf GitHub Pages verfügbar!
+
 ## 🚀 Features
 
 - **📊 Dashboard** - Übersicht über KPIs (Klicks, Conversions, Conversion Rate, Revenue)
