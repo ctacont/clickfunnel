@@ -1,0 +1,155 @@
+﻿<!-- ******************
+Code & Design (c) 2025 by Hasan Yüksel
+Website: https://hasanyuksel.de/
+Email: info@hasanyueksel.de
+github: https://github.com/ctacont/
+*********************** -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+        <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+      </svg>
+      {{ title() }} <small class="text-white-50">DEMO by Hasan Yüksel</small>
+    </a>
+    <button class="navbar-toggler" type="button" (click)="toggleNav()" [attr.aria-expanded]="!isNavCollapsed()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [class.show]="!isNavCollapsed()">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" (click)="isNavCollapsed.set(true)">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active" (click)="isNavCollapsed.set(true)">Produkte</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/funnel" routerLinkActive="active" (click)="isNavCollapsed.set(true)">Funnel Analyse</a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link btn btn-link position-relative" (click)="toggleCart(); $event.preventDefault()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            @if (cartService.totalItems() > 0) {
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ cartService.totalItems() }}
+              </span>
+            }
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Quick Cart Sidebar -->
+<div class="quick-cart-overlay" [class.show]="isCartOpen()" (click)="toggleCart()"></div>
+<div class="quick-cart" [class.show]="isCartOpen()">
+  <div class="quick-cart-header">
+    <h5 class="mb-0">Warenkorb ({{ cartService.totalItems() }})</h5>
+    <button type="button" class="btn-close" (click)="toggleCart()"></button>
+  </div>
+  
+  <div class="quick-cart-body">
+    @if (cartService.cartItems().length > 0) {
+      @for (item of cartService.cartItems(); track item.product.id) {
+        <div class="cart-item">
+          <div class="d-flex gap-3">
+            @if (item.product.imageUrl) {
+              <img [src]="item.product.imageUrl" [alt]="item.product.name" class="cart-item-image">
+            }
+            <div class="flex-grow-1">
+              <h6 class="mb-1">{{ item.product.name }}</h6>
+              <p class="text-muted mb-1 small">{{ item.product.price | number:'1.2-2' }}€</p>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-secondary">{{ item.quantity }}x</span>
+                <strong>{{ (item.product.price * item.quantity) | number:'1.2-2' }}€</strong>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" (click)="removeFromCart(item.product.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="text-center py-5 text-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <p class="mt-3">Ihr Warenkorb ist leer</p>
+        <button class="btn btn-primary btn-sm" (click)="toggleCart()" routerLink="/products">Produkte ansehen</button>
+      </div>
+    }
+  </div>
+
+  @if (cartService.cartItems().length > 0) {
+    <div class="quick-cart-footer">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <strong>Gesamt:</strong>
+        <h5 class="mb-0 text-primary">{{ cartService.totalPrice() | number:'1.2-2' }}€</h5>
+      </div>
+      <div class="d-grid gap-2">
+        <button class="btn btn-success" (click)="checkout()">
+          Zur Kasse
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="cartService.clearCart()">
+          Warenkorb leeren
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Thank You Modal -->
+@if (showThankYouModal()) {
+  <div class="thank-you-modal-overlay" (click)="closeThankYouModal()"></div>
+  <div class="thank-you-modal">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <button type="button" class="btn-close" (click)="closeThankYouModal()"></button>
+      </div>
+      <div class="modal-body text-center py-5">
+        <div class="mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+            <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          </svg>
+        </div>
+        <h3 class="mb-2">Vielen Dank für Ihren Kauf!</h3>
+        <p class="text-muted mb-4">Ihr Bestellung wurde erfolgreich verarbeitet. Sie erhalten in Kürze eine Bestätigungsmail.</p>
+        <p class="text-muted small">(Dies ist eine Demo-Anwendung)</p>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-primary w-100" (click)="closeThankYouModal()">Fertig</button>
+      </div>
+    </div>
+  </div>
+}
+
+<main class="main-content">
+  @if (cartService.lastAdded(); as product) {
+    <div class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" 
+         style="z-index: 9999; min-width: 300px;" role="alert">
+      <strong>✓ Zum Warenkorb hinzugefügt!</strong>
+      <p class="mb-0">{{ product.name }} wurde in den Warenkorb gelegt.</p>
+    </div>
+  }
+  <router-outlet />
+</main>
+<footer class="footer bg-light py-4 mt-5">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="text-muted mb-0">&copy; 2025 by Hasan Yüksel - DEMO APP: Click Funnel Analytics. Alle Rechte vorbehalten.</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="text-muted mb-0">Erstellt mit Angular 20 + Bootstrap 5</p>
+      </div>
+    </div>
+  </div>
+</footer>

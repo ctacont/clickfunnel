@@ -1,0 +1,192 @@
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="display-4">Funnel Analyse</h1>
+          <p class="lead text-muted mb-0">Visualisierung und Analyse Ihrer Conversion-Funnels</p>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-outline-danger" (click)="resetData()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </svg>
+            Daten zurücksetzen
+          </button>
+          <button class="btn btn-outline-success" (click)="restoreDemoData()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+            </svg>
+            Demo-Daten wiederherstellen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (selectedFunnel(); as funnel) {
+    <!-- Funnel Info -->
+    <div class="row mb-4">
+      <div class="col">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <h3 class="mb-2">{{ funnel.name }}</h3>
+                <p class="text-muted mb-0">{{ funnel.description }}</p>
+              </div>
+              <div class="col-md-6">
+                <div class="row text-center">
+                  @if (funnelAnalytics(); as analytics) {
+                    <div class="col-4">
+                      <h4 class="text-primary mb-0">{{ analytics.totalVisitors }}</h4>
+                      <small class="text-muted">Besucher</small>
+                    </div>
+                    <div class="col-4">
+                      <h4 class="text-success mb-0">{{ analytics.completedFunnels }}</h4>
+                      <small class="text-muted">Abschlüsse</small>
+                    </div>
+                    <div class="col-4">
+                      <h4 class="text-info mb-0">{{ analytics.overallConversionRate | number:'1.1-1' }}%</h4>
+                      <small class="text-muted">Rate</small>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Funnel Visualization -->
+    <div class="row mb-4">
+      <div class="col">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">Funnel-Verlauf</h5>
+          </div>
+          <div class="card-body">
+            <div class="funnel-container">
+              @for (step of funnelSteps(); track step.id; let i = $index) {
+                @let analytics = stepAnalytics()[i];
+                <div class="funnel-step" [attr.data-step]="i + 1">
+                  <div class="funnel-step-visual" [class]="'bg-' + getStepColor(i) + ' bg-opacity-10'">
+                    <div class="funnel-step-icon">
+                      <span class="display-4">{{ getStepIcon(step.type) }}</span>
+                    </div>
+                    <div class="funnel-step-content">
+                      <h5 class="mb-1">{{ step.name }}</h5>
+                      <p class="text-muted small mb-2">{{ step.description }}</p>
+                      
+                      @if (analytics) {
+                        <div class="row g-2 text-center">
+                          <div class="col-3">
+                            <div class="metric">
+                              <div class="metric-value">{{ analytics.totalVisits }}</div>
+                              <div class="metric-label">Visits</div>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="metric">
+                              <div class="metric-value">{{ analytics.uniqueVisitors }}</div>
+                              <div class="metric-label">Unique</div>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="metric">
+                              <div class="metric-value">{{ analytics.conversions }}</div>
+                              <div class="metric-label">Conversions</div>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="metric">
+                              <div class="metric-value text-success">{{ analytics.conversionRate | number:'1.0-0' }}%</div>
+                              <div class="metric-label">Rate</div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="progress mt-3" style="height: 8px;">
+                          <div class="progress-bar" 
+                               [class]="'bg-' + getStepColor(i)"
+                               [style.width.%]="analytics.conversionRate"
+                               role="progressbar"></div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  
+                  @if (i < funnelSteps().length - 1) {
+                    <div class="funnel-arrow">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-muted" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z"/>
+                      </svg>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step Details Table -->
+    <div class="row">
+      <div class="col">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">Detaillierte Step-Analyse</h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th class="text-end">Besuche</th>
+                    <th class="text-end">Unique Besucher</th>
+                    <th class="text-end">Conversions</th>
+                    <th class="text-end">Conversion Rate</th>
+                    <th class="text-end">Ø Zeit (Sek.)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (analytics of stepAnalytics(); track analytics.stepId; let i = $index) {
+                    <tr>
+                      <td>
+                        <span class="me-2">{{ getStepIcon(funnelSteps()[i].type) }}</span>
+                        <strong>{{ analytics.stepName }}</strong>
+                      </td>
+                      <td class="text-end">{{ analytics.totalVisits }}</td>
+                      <td class="text-end">{{ analytics.uniqueVisitors }}</td>
+                      <td class="text-end">{{ analytics.conversions }}</td>
+                      <td class="text-end">
+                        <span class="badge"
+                              [class.bg-success]="analytics.conversionRate >= 15"
+                              [class.bg-warning]="analytics.conversionRate >= 5 && analytics.conversionRate < 15"
+                              [class.bg-danger]="analytics.conversionRate < 5">
+                          {{ analytics.conversionRate | number:'1.1-1' }}%
+                        </span>
+                      </td>
+                      <td class="text-end">{{ analytics.averageTimeSpent }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  } @else {
+    <div class="alert alert-info">
+      <h4>Kein Funnel verfügbar</h4>
+      <p class="mb-0">Es wurde noch kein Funnel konfiguriert.</p>
+    </div>
+  }
+</div>

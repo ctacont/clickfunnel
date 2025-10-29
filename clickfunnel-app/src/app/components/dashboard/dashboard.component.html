@@ -1,0 +1,231 @@
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="display-4">Click Funnel Dashboard</h1>
+          <p class="lead text-muted mb-0">Übersicht über Ihre Produkt-Performance und Conversion-Funnels</p>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-outline-danger" (click)="resetData()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </svg>
+            Daten zurücksetzen
+          </button>
+          <button class="btn btn-outline-success" (click)="restoreDemoData()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+            </svg>
+            Demo-Daten wiederherstellen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-1 small">Gesamte Klicks</p>
+              <h3 class="mb-0">{{ totalClicks() }}</h3>
+            </div>
+            <div class="bg-primary bg-opacity-10 rounded p-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-1 small">Conversions</p>
+              <h3 class="mb-0">{{ totalConversions() }}</h3>
+            </div>
+            <div class="bg-success bg-opacity-10 rounded p-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-1 small">Ø Conversion Rate</p>
+              <h3 class="mb-0">{{ averageConversionRate() | number:'1.1-1' }}%</h3>
+            </div>
+            <div class="bg-info bg-opacity-10 rounded p-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-info" viewBox="0 0 16 16">
+                <path d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+                <path d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-1 small">Revenue (geschätzt)</p>
+              <h3 class="mb-0">{{ funnelAnalytics()?.totalRevenue || 0 | number:'1.0-0' }}€</h3>
+            </div>
+            <div class="bg-warning bg-opacity-10 rounded p-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-warning" viewBox="0 0 16 16">
+                <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts and Tables Row -->
+  <div class="row g-4">
+    <!-- Product Performance Table -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="mb-0">Produkt Performance</h5>
+        </div>
+        <div class="card-body">
+          @if (productAnalytics().length > 0) {
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Produkt</th>
+                    <th class="text-end">Klicks</th>
+                    <th class="text-end">Conversions</th>
+                    <th class="text-end">Rate</th>
+                    <th class="text-end">Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (analytics of productAnalytics(); track analytics.productId) {
+                    <tr>
+                      <td>
+                        <div class="fw-medium">{{ getProductName(analytics.productId) }}</div>
+                        <small class="text-muted">ID: {{ analytics.productId }}</small>
+                      </td>
+                      <td class="text-end">{{ analytics.totalClicks }}</td>
+                      <td class="text-end">{{ analytics.conversions }}</td>
+                      <td class="text-end">
+                        <span class="badge" 
+                              [class.bg-success]="analytics.conversionRate >= 10"
+                              [class.bg-warning]="analytics.conversionRate >= 5 && analytics.conversionRate < 10"
+                              [class.bg-danger]="analytics.conversionRate < 5">
+                          {{ analytics.conversionRate | number:'1.1-1' }}%
+                        </span>
+                      </td>
+                      <td class="text-end fw-medium">{{ analytics.revenue | number:'1.0-0' }}€</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <div class="text-center py-5">
+              <p class="text-muted">Keine Daten verfügbar</p>
+              <button class="btn btn-primary" routerLink="/products">Produkte ansehen</button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="mb-0">Funnel Übersicht</h5>
+        </div>
+        <div class="card-body">
+          @if (funnelAnalytics(); as analytics) {
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Gesamte Besucher</small>
+              <h4 class="mb-0">{{ analytics.totalVisitors }}</h4>
+            </div>
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Abgeschlossene Funnels</small>
+              <h4 class="mb-0">{{ analytics.completedFunnels }}</h4>
+            </div>
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Gesamt Conversion Rate</small>
+              <div class="d-flex align-items-center">
+                <h4 class="mb-0 me-2">{{ analytics.overallConversionRate | number:'1.1-1' }}%</h4>
+              </div>
+              <div class="progress mt-2" style="height: 8px;">
+                <div class="progress-bar bg-success" 
+                     [style.width.%]="analytics.overallConversionRate"
+                     role="progressbar"></div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <small class="text-muted d-block mb-1">Ø Order Value</small>
+              <h4 class="mb-0">{{ analytics.averageOrderValue | number:'1.0-0' }}€</h4>
+            </div>
+            <hr>
+            <button class="btn btn-outline-primary w-100" routerLink="/funnel">
+              Funnel Details anzeigen
+            </button>
+          } @else {
+            <p class="text-muted mb-0">Keine Funnel-Daten verfügbar</p>
+          }
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="mb-0">Quick Actions</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" routerLink="/products">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+              </svg>
+              Produkte verwalten
+            </button>
+            <button class="btn btn-outline-success" routerLink="/funnel">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+              </svg>
+              Funnel analysieren
+            </button>
+            <button class="btn btn-outline-info" routerLink="/analytics">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
+              </svg>
+              Analytics Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

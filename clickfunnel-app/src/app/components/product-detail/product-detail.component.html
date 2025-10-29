@@ -1,0 +1,113 @@
+<div class="container-fluid py-4">
+  @if (product(); as prod) {
+    <div class="row mb-4">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/products">Produkte</a></li>
+            <li class="breadcrumb-item active">{{ prod.name }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <div class="card border-0 shadow-sm">
+          @if (prod.imageUrl) {
+            <img [src]="prod.imageUrl" 
+                 class="card-img-top" 
+                 [alt]="prod.name"
+                 style="height: 400px; object-fit: cover;">
+          }
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h1 class="h2">{{ prod.name }}</h1>
+              <span class="badge bg-primary fs-6">{{ prod.category }}</span>
+            </div>
+
+            <p class="lead text-muted mb-4">{{ prod.description }}</p>
+
+            <div class="mb-4">
+              <div class="d-flex align-items-center gap-3">
+                <span class="display-4 text-primary mb-0">{{ prod.price | number:'1.2-2' }}€</span>
+                <small class="text-muted">inkl. MwSt.</small>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="mb-4">
+              <h5>Produktdetails</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <strong>Produkt-ID:</strong> {{ prod.id }}
+                </li>
+                <li class="mb-2">
+                  <strong>Kategorie:</strong> {{ prod.category }}
+                </li>
+                <li class="mb-2">
+                  <strong>Erstellt:</strong> {{ prod.createdAt | date:'dd.MM.yyyy' }}
+                </li>
+              </ul>
+            </div>
+
+            <hr>
+
+            <div class="mb-4">
+              <label class="form-label"><strong>Anzahl:</strong></label>
+              <div class="input-group" style="max-width: 200px;">
+                <button class="btn btn-outline-secondary" 
+                        type="button"
+                        (click)="decreaseQuantity()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                  </svg>
+                </button>
+                <input type="number" 
+                       class="form-control text-center" 
+                       [value]="quantity()"
+                       readonly>
+                <button class="btn btn-outline-secondary" 
+                        type="button"
+                        (click)="increaseQuantity()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button class="btn btn-success btn-lg" 
+                      (click)="addToCart()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                {{ quantity() }}x in den Warenkorb legen
+              </button>
+              <a routerLink="/products" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                </svg>
+                Zurück zur Produktübersicht
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="alert alert-warning">
+      <h4>Produkt nicht gefunden</h4>
+      <p>Das angeforderte Produkt konnte nicht gefunden werden.</p>
+      <a routerLink="/products" class="btn btn-primary">Zur Produktübersicht</a>
+    </div>
+  }
+</div>
